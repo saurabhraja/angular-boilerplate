@@ -15,12 +15,14 @@ pipeline {
       steps {
         script {
           def USER_INPUT = input (
-              message: 'Install Dependencies ?',
+              message: 'Do you want to Install Dependencies ?',
               parameters: [
-                      [$class: 'ChoiceParameterDefinition',
-                        choices: ['No','Yes'].join('\n'),
+                      [
+                        $class: 'ChoiceParameterDefinition',
+                        choices: ['Yes','No'].join('\n'),
                         name: 'input',
-                        description: '']
+                        description: ''
+                      ]
               ])
 
           echo "The answer is: ${USER_INPUT}"
@@ -39,14 +41,14 @@ pipeline {
     stage ('Run Tests') {
       steps {
         bat '''
-          ng test --single-run --browsers Chrome_no_sandbox
+          npm run test --single-run --browsers Chrome_no_sandbox
         '''
       }
     }
     stage ('Build Project') {
       steps {
         bat '''
-          ng build --prod --build-optimizer
+          npm run build --prod --build-optimizer
           echo 'This directory contains the following text files:'
           echo.
           dir /b *.txt
