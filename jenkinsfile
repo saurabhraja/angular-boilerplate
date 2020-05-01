@@ -1,9 +1,8 @@
 pipeline{
   agent any
   tools {
-    git 'GIT'
-    jdk 'localJava'
-    nodejs 'localNode'
+    git 'localGIT'
+    jdk 'localJDK'
   }
   stages{
     stage ('Code Checkout'){
