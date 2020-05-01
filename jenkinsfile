@@ -38,11 +38,23 @@ pipeline {
         }
       }
     }
+    stage ('Run Tests') {
+      steps {
+        bat '''
+          npm test --browsers ChromeHeadless
+        '''
+      }
+      post {
+          always {
+            echo 'Testing complete..'
+          }
+      }
+    }
     stage ('Build Project') {
       steps {
         bat '''
           npm run build --prod
-          echo 'This directory contains the following text files:'
+          echo 'This directory contains the following files:'
           echo.
           dir /b *.txt
         '''
