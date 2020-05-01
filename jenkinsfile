@@ -13,26 +13,27 @@ pipeline {
     }
     stage ('Install Dependencies') {
       steps {
-        def USER_INPUT = input (
-            message: 'Install Dependencies ?',
-            parameters: [
-                    [$class: 'ChoiceParameterDefinition',
-                      choices: ['No','Yes'].join('\n'),
-                      name: 'input',
-                      description: '']
-            ])
+        script {
+          def USER_INPUT = input (
+              message: 'Install Dependencies ?',
+              parameters: [
+                      [$class: 'ChoiceParameterDefinition',
+                        choices: ['No','Yes'].join('\n'),
+                        name: 'input',
+                        description: '']
+              ])
 
-        echo "The answer is: ${USER_INPUT}"
+          echo "The answer is: ${USER_INPUT}"
 
-        if( "${USER_INPUT}" == "Yes"){
-            bat '''
-              echo 'Before npm install starts:'
-              npm install
-            '''
-        } else {
-            echo 'Installation skipped...'
+          if( "${USER_INPUT}" == "Yes"){
+              bat '''
+                echo 'Before npm install starts:'
+                npm install
+              '''
+          } else {
+              echo 'Installation skipped...'
+          }
         }
-        
       }
     }
     stage ('Run Tests') {
