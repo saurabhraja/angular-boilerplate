@@ -41,7 +41,7 @@ pipeline {
     stage ('Run Tests') {
       steps {
         bat '''
-          npm test --browsers ChromeHeadless
+          npm test --browser=ChromeHeadless --code-coverage=true --single-run=true
         '''
       }
       post {
