@@ -2,7 +2,7 @@ pipeline{
   agent any
   tools {
     git 'localGIT'
-    jdk 'localJDK',
+    jdk 'localJDK'
     nodejs 'localNode'
   }
   stages{
