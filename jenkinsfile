@@ -1,0 +1,25 @@
+pipeline{
+  agent { label 'nodejs8' }
+  stages{
+    stage ('Code Checkout'){
+      steps{
+        checkout scm
+      }
+    }
+    stage ('Install Dependencies'){
+      steps{
+        sh '''
+          npm install --verbose -d 
+          npm install --save classlist.js
+        '''
+      }
+    }
+    stage ('Console Log'){
+      steps{
+        sh '''
+          echo 'Hey there'
+        '''
+      }
+    }
+  }
+}
