@@ -20,7 +20,7 @@ pipeline {
                       [
                         $class: 'ChoiceParameterDefinition',
                         choices: ['Yes','No'].join('\n'),
-                        name: 'input',
+                        name: '',
                         description: ''
                       ]
               ])
@@ -41,14 +41,14 @@ pipeline {
     stage ('Run Tests') {
       steps {
         bat '''
-          npm run test --single-run --browsers Chrome_no_sandbox
+          npm run test
         '''
       }
     }
     stage ('Build Project') {
       steps {
         bat '''
-          npm run build --prod --build-optimizer
+          npm run build --prod
           echo 'This directory contains the following text files:'
           echo.
           dir /b *.txt
