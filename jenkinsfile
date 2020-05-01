@@ -1,4 +1,4 @@
-pipeline{
+pipeline {
   agent any
   tools {
     git 'localGIT'
@@ -11,42 +11,46 @@ pipeline{
         checkout scm
       }
     }
-    stage ('Install Dependencies'){
-      steps{
-        bat '''
-          echo 'Before npm install starts:'
-          echo.
-          dir /ad
-          rm -rf node_modules
-          npm install
-        '''
+    stage ('Install Dependencies') {
+      steps {
+        def USER_INPUT = input (
+            message: 'Install Dependencies ?',
+            parameters: [
+                    [$class: 'ChoiceParameterDefinition',
+                      choices: ['No','Yes'].join('\n'),
+                      name: 'input',
+                      description: '']
+            ])
+
+        echo "The answer is: ${USER_INPUT}"
+
+        if( "${USER_INPUT}" == "Yes"){
+            bat '''
+              echo 'Before npm install starts:'
+              npm install
+            '''
+        } else {
+            echo 'Installation skipped...'
+        }
+        
       }
     }
-    stage ('Run Tests'){
-      steps{
+    stage ('Run Tests') {
+      steps {
         bat '''
-          $(npm bin)ng test --single-run --browsers Chrome_no_sandbox
+          ng test --single-run --browsers Chrome_no_sandbox
         '''
-      }
-      post {
-          always {
-            junit test-results.xml
-          }
-      }
-    }
-    stage ('Check Code Quality'){
-      steps{
-        bat '$(npm bin)ng lint'
       }
     }
     stage ('Build Project') {
-      steps{
-        bat '$(npm bin)ng build --prod --build-optimizer'
+      steps {
         bat '''
+          ng build --prod --build-optimizer
           echo 'This directory contains the following text files:'
           echo.
           dir /b *.txt
         '''
+        
       }
     }
   }
