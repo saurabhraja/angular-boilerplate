@@ -6,24 +6,41 @@ pipeline{
     nodejs 'localNode'
   }
   stages{
-    stage ('Code Checkout'){
-      steps{
-        echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
+    stage ('Code Checkout') {
+      steps {
         checkout scm
       }
     }
     stage ('Install Dependencies'){
       steps{
         bat '''
+          rm -rf node_modules
           npm install
         '''
       }
     }
-    stage ('Console Log'){
+    stage ('Run Tests'){
       steps{
-        sh '''
-          echo 'Hey there'
+        bat '''
+          $(npm bin)ng test --single-run --browsers Chrome_no_sandbox
         '''
+      }
+      post {
+          always {
+            junit test-results.xml
+          }
+      }
+    }
+    stage ('Check Code Quality'){
+      steps{
+        bat '$(npm bin)ng lint'
+      }
+    }
+    stage ('Build Project') {
+      steps{
+        bat '$(npm bin)ng build --prod --build-optimizer'
+        bat dir /ad
+        zip zipFile: 'test.zip', archive: false, dir: 'target'
       }
     }
   }
