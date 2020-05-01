@@ -14,6 +14,9 @@ pipeline{
     stage ('Install Dependencies'){
       steps{
         bat '''
+          echo 'Before npm install starts:'
+          echo.
+          dir /ad
           rm -rf node_modules
           npm install
         '''
@@ -39,8 +42,11 @@ pipeline{
     stage ('Build Project') {
       steps{
         bat '$(npm bin)ng build --prod --build-optimizer'
-        bat dir /ad
-        zip zipFile: 'test.zip', archive: false, dir: 'target'
+        bat '''
+          echo 'This directory contains the following text files:'
+          echo.
+          dir /b *.txt
+        '''
       }
     }
   }
