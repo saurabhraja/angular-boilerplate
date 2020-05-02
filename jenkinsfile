@@ -27,9 +27,8 @@ pipeline {
 
           echo "The answer is: ${USER_INPUT}"
 
-          if("${USER_INPUT}" == "Yes"){
+          if("${USER_INPUT}" == "Yes") {
               bat '''
-                echo 'Before npm install starts:'
                 npm install
               '''
           } else {
