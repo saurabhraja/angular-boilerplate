@@ -15,7 +15,7 @@ pipeline {
       steps {
         script {
           def USER_INPUT = input (
-              message: 'Install Dependencies ?',
+              message: 'Install Dependencies?',
               parameters: [
                       [
                         $class: 'ChoiceParameterDefinition',
@@ -27,7 +27,7 @@ pipeline {
 
           echo "The answer is: ${USER_INPUT}"
 
-          if( "${USER_INPUT}" == "Yes"){
+          if("${USER_INPUT}" == "Yes"){
               bat '''
                 echo 'Before npm install starts:'
                 npm install
@@ -38,11 +38,25 @@ pipeline {
         }
       }
     }
+    stage ('Run Tests') {
+      steps {
+        bat '''
+          npm run test:ci
+        '''
+      }
+      post {
+          always {
+            echo 'Testing complete..'
+          }
+      }
+    }
     stage ('Build Project') {
       steps {
+        bat '''
+          npm run build --prod
+        '''
         script {
-          echo "This directory contains the following files:"
-          zip zipFile: 'test.zip', archive: false, dir: 'dist/angular-boilerplate'
+          zip zipFile: 'angular-boilerplate.zip', archive: false, dir: 'dist/angular-boilerplate'
         }
       }
     }
