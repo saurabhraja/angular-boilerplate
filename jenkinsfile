@@ -40,13 +40,12 @@ pipeline {
     }
     stage ('Build Project') {
       steps {
-        bat '''
-          npm run build --prod
-          echo 'This directory contains the following files:'
+        script {
+          echo "This directory contains the following files:"
           echo.
           dir /ad
           zip zipFile: 'test.zip', archive: false, dir: 'dist/angular-boilerplate'
-        '''
+        }
       }
     }
   }
