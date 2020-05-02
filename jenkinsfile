@@ -15,7 +15,7 @@ pipeline {
       steps {
         script {
           def USER_INPUT = input (
-              message: 'Do you want to Install Dependencies ?',
+              message: 'Install Dependencies ?',
               parameters: [
                       [
                         $class: 'ChoiceParameterDefinition',
@@ -42,7 +42,6 @@ pipeline {
       steps {
         script {
           echo "This directory contains the following files:"
-          dir /ad
           zip zipFile: 'test.zip', archive: false, dir: 'dist/angular-boilerplate'
         }
       }
