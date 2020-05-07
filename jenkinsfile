@@ -38,22 +38,35 @@ pipeline {
       }
     }
     stage ('Run Tests') {
-      steps {
-        bat '''
-          npm run test:ci
-        '''
-      }
-      post {
-          always {
-            echo 'Testing complete..'
-          }
+      script {
+        def USER_INPUT = input (
+            message: 'Run Tests?',
+            parameters: [
+                    [
+                      $class: 'ChoiceParameterDefinition',
+                      choices: ['Yes','No'].join('\n'),
+                      name: '',
+                      description: ''
+                    ]
+            ])
+
+        echo "The answer is: ${USER_INPUT}"
+
+        if("${USER_INPUT}" == "Yes") {
+            bat '''
+              npm run test:ci
+            '''
+        } else {
+            echo 'Test cases skipped...'
+        }
       }
     }
     stage ('Build Project') {
       steps {
         bat '''
-          npm run build --prod
+          echo 'Copying started'
           cp -r dist aws-artifact
+          echo 'Copying completed'
         '''
         script {
           zip zipFile: 'angular-boilerplate.zip', archive: false, dir: 'aws-artifact/'
