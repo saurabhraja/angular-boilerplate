@@ -66,11 +66,12 @@ pipeline {
     stage ('Build Project') {
       steps {
         bat '''
+        
+        '''
+        script {
           echo 'Copying started'
           cp -r dist aws-artifact
           echo 'Copying completed'
-        '''
-        script {
           zip zipFile: 'angular-boilerplate.zip', archive: false, dir: 'aws-artifact/'
         }
       }
