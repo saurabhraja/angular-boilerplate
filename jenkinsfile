@@ -67,7 +67,7 @@ pipeline {
       steps {
         bat '''
           echo 'Copying started'
-          xcopy dist aws-artifact/
+          Xcopy /S /I /E dist aws-artifact
           echo 'Copying completed'
         '''
         script {
