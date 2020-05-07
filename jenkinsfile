@@ -38,26 +38,28 @@ pipeline {
       }
     }
     stage ('Run Tests') {
-      script {
-        def USER_INPUT = input (
-            message: 'Run Tests?',
-            parameters: [
-                    [
-                      $class: 'ChoiceParameterDefinition',
-                      choices: ['Yes','No'].join('\n'),
-                      name: '',
-                      description: ''
-                    ]
-            ])
+      steps {
+        script {
+          def USER_INPUT = input (
+              message: 'Run Tests?',
+              parameters: [
+                      [
+                        $class: 'ChoiceParameterDefinition',
+                        choices: ['Yes','No'].join('\n'),
+                        name: '',
+                        description: ''
+                      ]
+              ])
 
-        echo "The answer is: ${USER_INPUT}"
+          echo "The answer is: ${USER_INPUT}"
 
-        if("${USER_INPUT}" == "Yes") {
-            bat '''
-              npm run test:ci
-            '''
-        } else {
-            echo 'Test cases skipped...'
+          if("${USER_INPUT}" == "Yes") {
+              bat '''
+                npm run test:ci
+              '''
+          } else {
+              echo 'Test cases skipped...'
+          }
         }
       }
     }
